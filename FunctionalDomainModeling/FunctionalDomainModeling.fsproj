@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="MaybeBuilder.fs" />
+    <Compile Include="Card.fs" />
+    <Compile Include="Deck.fs" />
+    <Compile Include="Action.fs" />
+    <Compile Include="Hand.fs" />
+    <Compile Include="Player.fs" />
+    <Compile Include="Points.fs" />
+    <Compile Include="Dealer.fs" />
+    <Compile Include="Game.fs" />
+    <Compile Include="Outcome.fs" />
+    <Compile Include="Turn.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+</Project>
