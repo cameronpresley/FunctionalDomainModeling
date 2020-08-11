@@ -27,6 +27,5 @@ let main argv =
         |> Option.map Outcome.determineOutcomes
         |> Option.map outcomesToMessages
         |> Option.iter (printfn "%s" )
-    //printfn "%A" value
-    //|> Option.iter printfn "%s"
+
     0 // return an integer exit code

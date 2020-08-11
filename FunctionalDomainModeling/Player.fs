@@ -1,25 +1,26 @@
 module Player
 
 open Hand
-open Deck
+open MaybeBuilder
 
-type Player = {id:int; hand:Hand}
+type Player = { Id: int; Hand: Hand }
 
 let create id deck =
-  Deck.drawMultiple deck 2 |> Option.map(fun(hand, deck)->({id=id; hand=hand},deck))
+    Deck.drawMultiple deck 2
+    |> Option.map (fun (hand, deck) -> ({ Id = id; Hand = hand }, deck))
 
-let createMultiple number deck = 
-  let initialState = Some([], deck)
-  let rec builder number state =
-    if number = 0 then state
-    else
-      match state with
-      | None -> None
-      | Some(players, deck) ->
-        match create number deck with
-        | None -> None
-        | Some(player, deck) -> 
-          let newState = Some(players@[player], deck)
+let createMultiple number deck =
+    let initialState = Some([], deck)
+
+    let rec builder number state =
+        if number = 0 then
+            state
+        else
+          let newState = maybe {
+            let! players,deck = state
+            let! player,deck = create number deck
+            return (players@[player], deck) 
+          }
           builder (number-1) newState
-  builder number initialState
-  
+
+    builder number initialState

@@ -1,8 +1,11 @@
 module Card
 
-open Rank
-open Suit
+type Rank = Ace  | Two | Three | Four 
+          | Five | Six | Seven | Eight 
+          | Nine | Ten | Jack  | Queen | King
 
-type Card = {rank:Rank; suit:Suit}
+type Suit = Hearts | Clubs | Spades | Diamonds
 
-let format c = sprintf "%A of %A\n" c.rank c.suit
+type Card = { Rank: Rank; Suit: Suit }
+
+let format c = sprintf "%A of %A\n" c.Rank c.Suit

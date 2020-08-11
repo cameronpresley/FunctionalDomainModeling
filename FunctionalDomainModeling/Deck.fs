@@ -1,15 +1,13 @@
 module Deck
 open Card
-open Rank
-open Suit
 open MaybeBuilder
 
-type Deck = private Deck of Card list
+type Deck = Deck of Card list
 
 let create () = 
  let ranks = [Ace; Two; Three; Four; Five; Six; Seven; Eight; Nine; Ten; Jack; Queen; King]
  let suits = [Hearts; Clubs; Spades; Diamonds]
- let tupleToCard (r:Rank, s:Suit) = {rank=r; suit=s}
+ let tupleToCard (r:Rank, s:Suit) = {Rank=r; Suit=s}
 
  List.allPairs ranks suits |> List.map tupleToCard
 
@@ -19,28 +17,33 @@ let shuffle (sorter:(Card -> int)) =
 let draw (Deck d) = 
   match d with
   | [] -> None
-  | h::t -> Some(h, (Deck)t)
+  | card::restOfDeck -> Some(card, (Deck)restOfDeck)
 
-// let drawMultiple d number = 
-//   let rec buildHand (number:int) (state:(Card list * Deck) option) =
-//     if number = 0 then state
-//     else
-//       match state with
-//       | None -> None
-//       | Some (cards, restOfDeck) ->
-//         match draw restOfDeck with
-//         | None -> None
-//         | Some (card, restOfDeck) ->
-//           buildHand (number-1) (Some(cards@[card], restOfDeck))
+let drawMultiple' deck number = 
+  let rec buildHand (num:int) (state:(Card list * Deck) option) =
+    match num with
+    | 0 -> state
+    | _ ->
+      match state with
+      | None -> None
+      | Some (cards, deck) ->
+        match draw deck with
+        | None -> None
+        | Some (card, deck) -> 
+          buildHand (num-1) (Some(cards@[card], deck))
 
-//   buildHand number (Some([], d))
+  buildHand number (Some([], deck))
 
-let drawMultiple d number =
-  let rec buildHand (number:int) (state:(Card list * Deck)option) =
-    if number = 0 then state
-    else
-      state
-      |> Option.bind(fun((cards, deck)) -> 
-                        draw deck |> Option.map(fun(card, deck) -> (cards@[card], deck)))
-      |> buildHand (number-1)
-  buildHand number (Some([], d))
+let drawMultiple deck number =
+  let rec buildHand (num:int) (state:(Card list * Deck) option) =
+    match num with
+    | 0 -> state
+    | _ -> 
+      let newState = maybe{
+        let! cards,deck = state
+        let! card,deck = draw deck
+        return (cards@[card], deck)
+      }
+      buildHand (num-1) newState
+  
+  buildHand number (Some([], deck))

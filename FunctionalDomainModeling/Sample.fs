@@ -5,15 +5,15 @@ type Rank = Ace | Two | Three | Four | Five
           | Six | Seven | Eight | Nine | Ten
           | Jack | Queen | King
 type Suit = Hearts | Clubs | Spades | Diamonds
-type Card = {Rank:Rank; Suit:Suit}
+type Card = { Rank:Rank; Suit:Suit }
 type Deck = Deck of Card list
 type Hand = Card list
 type Action = Hit | Stay
 type Status = Busted | Stayed | Blackjack
 type Points = Hard of int | Soft of int*int
-type Player = {Id: int; Hand:Hand;}
-type Dealer = {Hand:Hand;}
-type Game = {Deck:Deck; Players:Player list; Dealer:Dealer}
+type Player = { Id: int; Hand:Hand; }
+type Dealer = { Hand:Hand; }
+type Game = { Deck:Deck; Players:Player list; Dealer:Dealer }
 
 let createDeck () =
   let ranks = [Ace; Two; Three; Four; Five; Six; Seven;

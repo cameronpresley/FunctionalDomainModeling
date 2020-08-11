@@ -1,12 +1,13 @@
 module Outcome
 
 open Points
-open Status
 open Player
 open Dealer
 open Game
 
 type Outcome = PlayerBlackjack | DealerBlackjack | PlayerWon | DealerWon | Push
+
+type Status = Stayed of int | Busted of int | Blackjack
 
 let determineStatus hand = 
   match Points.calculateHand hand with
@@ -18,7 +19,7 @@ let determineStatus hand =
   | Soft (x, y) when y > 21 && x > 21 -> Busted x
 
 let determineOutcome (dealer:Dealer) (player:Player) =
-  match determineStatus (dealer.hand), determineStatus(player.hand) with
+  match determineStatus (dealer.Hand), determineStatus(player.Hand) with
   | Blackjack, Blackjack -> Push
   | Blackjack, _ -> DealerBlackjack
   | _, Blackjack -> PlayerBlackjack
@@ -29,7 +30,7 @@ let determineOutcome (dealer:Dealer) (player:Player) =
   | Stayed x, Stayed y when x < y -> PlayerWon
 
 let determineOutcomes game =
-  List.allPairs [game.dealer] game.players
+  List.allPairs [game.Dealer] game.Players
   |> List.map (fun (dealer,player) -> determineOutcome dealer player)
   
 
